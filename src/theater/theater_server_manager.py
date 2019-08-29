@@ -1,9 +1,9 @@
 import logging
 from twisted.internet.protocol import Protocol, DatagramProtocol
 from util import packet_reader, data_util
+from theater.cmd.server import conn, user, echo, CGAM, UBRA, UGAM
 
 class run(Protocol):
-
     def __init__(self):
         self.name = "(TCP) TheaterServerManager"
         self.pid = 0
@@ -30,6 +30,19 @@ class run(Protocol):
             
             self.log.debug(f"[{self.name}] command={command}")
             
+            if command == "CONN":
+                conn.handle(self, data=packet)
+            elif command == "USER":
+                user.handle(self, data=packet)
+            elif command == "CGAM":
+                CGAM.handle(self, data=packet)
+            elif command == "UBRA":
+                UBRA.handle(self, data=packet)
+            elif command == "UGAM":
+                UGAM.handle(self, data=packet)
+            else:
+                self.log.warning(f"[{self.name}] Unknown command+txn received, how do I handle this?! command={command},txn={txn}")
+            
 class run_datagram(DatagramProtocol):
 
     def __init__(self):
@@ -40,3 +53,8 @@ class run_datagram(DatagramProtocol):
     def datagramReceived(self, data, addr):
         command = packet_reader.read_cmd(data)
         self.log.debug(f"[{self.name}] command={command},ip={str(addr[0])}")
+        
+        if command == "ECHO":
+            echo.handle(self, data, addr)
+        else:
+            self.log.warning(f"[{self.name}] Unknown command received, how do I handle this?! command={command}")

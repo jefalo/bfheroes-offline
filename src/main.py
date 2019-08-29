@@ -15,7 +15,7 @@ from webbrowser import webbrowser_api
 def run():
 
     log = logging.getLogger('root')
-    CONFIG = ConfigObj('src/config.ini')
+    CONFIG = ConfigObj('config.ini')
 
     if platform.system() != "Windows":
         log.warning('Will not attempt to automatically start the game since we are not running on Windows.')

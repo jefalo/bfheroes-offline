@@ -7,7 +7,7 @@ class run(resource.Resource):
     def __init__(self):
         self.name = "MagmaAPI"
         self.log = logging.getLogger('root')
-        self.config = ConfigObj('src/config.ini')
+        self.config = ConfigObj('config.ini')
         self.abilitiesOwned = []
 
     isLeaf = True
@@ -23,7 +23,10 @@ class run(resource.Resource):
             return reply.encode('utf-8', 'ignore')
 
         elif '/nucleus/check/user/' in uri:
-            reply = '<name>'+json_personas.global_stats.get('name', 'undefined')+'</name>'
+            if uri.split('/')[-1] == '1000':
+                reply = '<name>test-server</name>'
+            else:
+                reply = '<name>'+json_personas.global_stats.get('name', 'undefined')+'</name>'
             self.log.info(f"[{self.name}] GET reply={reply}")
             return reply.encode('utf-8', 'ignore')
 

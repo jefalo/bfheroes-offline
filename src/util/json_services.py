@@ -1,4 +1,4 @@
 import json
 
-with open("src/services.json") as services:
+with open("services.json") as services:
     services = json.load(services)

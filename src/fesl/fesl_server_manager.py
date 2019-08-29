@@ -9,6 +9,8 @@ class run(Protocol):
         self.name = "FESLServerManager"
         self.pid = 0
         self.log = logging.getLogger('root')
+        self.memcheck_timer = None
+        self.ping_timer = None
 
     def connectionMade(self):
         self.ip, self.port = self.transport.client
@@ -36,7 +38,8 @@ class run(Protocol):
             command = packet_reader.read_cmd(packet)
             packet_id = packet_reader.read_pid(packet)
             
-            self.log.debug(f"[{self.name}] command={command},txn={txn}")
+            if txn != "MemCheck":
+                self.log.debug(f"[{self.name}] command={command},txn={txn}")
             
             if command == "fsys":
                 fsys.handle(self, txn=txn)

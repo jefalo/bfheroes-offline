@@ -17,10 +17,10 @@
     },
     "MagmaAPI":
     {
-        "port":88
+        "port":80
     },
     "WebBrowserAPI":
     {
-        "port":80
+        "port":443
     }
 }
